@@ -1,15 +1,15 @@
 class Ring {
 
     /**
-     * Constructor for abstract Ring object
-     * @param {int}     id
-     * @param {int}     emit_val
-     * @param {float}   center_x
-     * @param {float}   center_y
-     * @param {float}   diameter
-     * @param {int}     color
-     * @param {boolean} ring_hit_status Default is false.
-     * @param {Sketch}  sketch
+     *
+     * @param {(int|string)} id
+     * @param {(int|Array)}  ring_val
+     * @param {float}        center_x
+     * @param {float}        center_y
+     * @param {float}        diameter
+     * @param {int}          color
+     * @param {boolean}      ring_hit_status Default is false.
+     * @param {Sketch}       sketch
      */
     constructor(id, ring_val, center_x, center_y, diameter, color, ring_hit_status=false, sketch) {
         this.id = id;
@@ -23,7 +23,7 @@ class Ring {
     }
 
     /**
-     * Method checks collision with a target ring
+     *
      * @param {Ring} target_ring Ring that is going to be collided with.
      */
     check_ring2ring_collision(target_ring) {
