@@ -2,13 +2,13 @@ class Ring {
 
     /**
      *
-     * @param {(int|string)} id
+     * @param {*}            id
      * @param {(int|Array)}  ring_val
      * @param {float}        center_x
      * @param {float}        center_y
      * @param {float}        diameter
      * @param {int}          color
-     * @param {boolean}      ring_hit_status Default is false.
+     * @param {boolean}      [ring_hit_status=false]
      * @param {Sketch}       sketch
      */
     constructor(id, ring_val, center_x, center_y, diameter, color, ring_hit_status=false, sketch) {

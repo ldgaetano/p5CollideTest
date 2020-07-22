@@ -9,7 +9,7 @@ class Commitment extends Ring {
      * @param {float}   diameter
      * @param {float}   growth_speed
      * @param {int}     color
-     * @param {boolean} ring_hit_status Default is false.
+     * @param {boolean} [ring_hit_status=false]
      * @param {Sketch}  sketch
      */
     constructor(id, commit_val, center_x, center_y, diameter, growth_speed, color, ring_hit_status=false, sketch) {
@@ -19,7 +19,7 @@ class Commitment extends Ring {
 
     /**
      *
-     * @param {Prover} prover Checks if the commit reaches another one of the provers.
+     * @param {Prover} prover Checks if the commit from the prover reaches another one of the other provers.
      */
     check_prover_collision(prover) {
         super.check_ring2ring_collision(prover);
@@ -27,7 +27,7 @@ class Commitment extends Ring {
 
     /**
      *
-     * @param {Verifier} verifier Checks if the commit reaches one of the other verifiers.
+     * @param {Verifier} verifier Checks if the commit from the prover reaches a verifier.
      */
     check_verifier_collision(verifier) {
         super.check_ring2ring_collision(verifier);
