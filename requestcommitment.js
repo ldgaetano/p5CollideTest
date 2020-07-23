@@ -1,9 +1,9 @@
-class Commitment extends Ring {
+class RequestCommitment extends Ring {
 
     /**
      *
      * @param {int}    id
-     * @param {int}    commit_val
+     * @param {int}    request_val
      * @param {number} center_x
      * @param {number} center_y
      * @param {number} diameter
@@ -11,15 +11,15 @@ class Commitment extends Ring {
      * @param {string} color
      * @param {Sketch} sketch
      */
-    constructor(id, commit_val, center_x, center_y, diameter, growth_speed, color, sketch) {
-        super(id, commit_val, center_x, center_y, diameter, color, sketch);
+    constructor(id, request_val, center_x, center_y, diameter, growth_speed, color, sketch) {
+        super(id, request_val, center_x, center_y, diameter, color, sketch);
         this.growth_speed = growth_speed;
     }
 
     /**
      *
-     * @param {Prover} prover     Checks if the commit from the prover reaches a prover.
-     * @param {string} new_color  Color to change commit if another prover is reached.
+     * @param {Prover} prover     Checks if the request from the verifier reaches a prover.
+     * @param {string} new_color  Color to change commitment when prover is reached.
      */
     check_prover_collision(prover, new_color) {
         super.check_ring2ring_collision(prover, new_color);
@@ -27,14 +27,14 @@ class Commitment extends Ring {
 
     /**
      *
-     * @param {Verifier} verifier  Checks if the commit from the prover reaches a verifier.
-     * @param {string}   new_color Color to change commit when a verifier is reached.
+     * @param {Verifier} verifier  Checks if the request reaches another verifier.
+     * @param {string}   new_color Color to change commitment when another verifier is reached.
      */
     check_verifier_collision(verifier, new_color) {
         super.check_ring2ring_collision(verifier, new_color);
     }
 
-    displayCommitment() {
+    displayRequest() {
         this.sketch.push();
         this.sketch.noFill();
         this.sketch.stroke(this.color);
