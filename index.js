@@ -40,5 +40,3 @@ const sketch1 = ( s1 ) => {
 };
 
 let p5_test= new p5(sketch1, "p5-test-canvas");
-
-let test = new
