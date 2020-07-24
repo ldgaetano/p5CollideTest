@@ -1,13 +1,12 @@
 class Character extends Ring {
 
-    #informations = [];
-    #displayed_informations = [];
+    #queued_informations = [];    // Contains instances of Information objects provided to the Character instance.
+    #displayed_informations = []; // Contains instances of Information objects to be displayed every frame.
 
     /**
      * Constructor for Character instance.
      * @param {string} name
      * @param {number} id
-     * @param {number} value
      * @param {number} center_x
      * @param {number} center_y
      * @param {number} diameter
@@ -24,25 +23,33 @@ class Character extends Ring {
     displayCharacter() {
 
         // Display circle and inner color.
-        this.sketch.push();
-        this.sketch.noStroke();
-        this.sketch.fill(this.color);
-        this.sketch.circle(this.center_x, this.center_y, this.diameter);
+        this.getSketch().push();
+        this.getSketch().noStroke();
+        this.getSketch().fill(this.getColor());
+        this.getSketch().circle(this.getCenterX(), this.getCenterY(), this.getDiameter());
 
         // Display text.
-        this.sketch.textSize(15);
-        this.sketch.fill(255);
-        this.sketch.text(this.name, this.center_x - (this.sketch.textWidth(this.name) / 2), this.center_y + ((this.sketch.textAscent() + this.sketch.textDescent()) / 4));
-        this.sketch.pop();
+        this.getSketch().textSize(15);
+        this.getSketch().fill(255);
+        this.getSketch().text(this.getName(), this.getCenterX() - (this.getSketch().textWidth(this.getName()) / 2), this.getCenterY() + ((this.getSketch().textAscent() + this.getSketch().textDescent()) / 4));
+        this.getSketch().pop();
 
     }
 
     /**
-     * Method to add Information object to information array.
+     * Method to add Information object to #informations array.
      * @param {Information} info Instance of an Information object.
      */
     addInformation(info) {
-        this.#informations.push(info);
+        this.#queued_informations.push(info);
+    }
+
+    /**
+     * Method to add Information object from user to #informations array.
+     * @param {Information} info Instance of an Information object.
+     */
+    addInformationFromUser(info) {
+        this.#queued_informations.unshift(info);
     }
 
     /**
@@ -50,11 +57,11 @@ class Character extends Ring {
      */
     emitInformation() {
 
-        // Add new element to displayed_information every multiple of the frameCount.
-        if( (this.#informations.length > 0) && (this.sketch.frameCount % 30 === 0)) {
-            let new_info = this.#informations.shift();
-            new_info.initPropStatus();
-            this.#displayed_informations.push(new_info);
+        // Add new element to #displayed_information every multiple of the frameCount only if #informations is populated.
+        if( (this.#queued_informations.length > 0) && (this.getSketch().frameCount % 30 === 0)) {
+            let new_info = this.#queued_informations.shift(); // Get Information instance from #informations array.
+            new_info.initPropStatus();                        // Initialize the propagation status.
+            this.#displayed_informations.push(new_info);      // Add Information instance to #displayed_informations array.
         }
 
         this.#displayed_informations.forEach(info => {
@@ -63,5 +70,23 @@ class Character extends Ring {
         })
 
     }
+
+    /**
+     * Get array of queued information.
+     * @returns {Information[]}
+     */
+    getQueuedInformations() {
+        return this.#queued_informations;
+    }
+
+    /**
+     * Get array of displayed information.
+     * @returns {Information[]}
+     */
+    getDisplayedInformations() {
+        return this.#displayed_informations;
+    }
+
+
 
 }

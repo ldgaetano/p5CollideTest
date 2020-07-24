@@ -1,14 +1,14 @@
 class Information extends Ring {
 
+    #val;
     #growth_rate;
     #prop_status = false;
-    #val;
 
     /**
      * Constructor for Information instance.
      * @param {string} name
      * @param {number} id
-     * @param {number} value
+     * @param {number} info_val
      * @param {number} center_x
      * @param {number} center_y
      * @param {number} diameter
@@ -24,14 +24,13 @@ class Information extends Ring {
 
     /**
      * Method to display the increasing diameter of the Information instance.
-     * @param {number} new_diameter
      */
     displayInformation() {
-        this.sketch.push();
-        this.sketch.noFill();
-        this.sketch.stroke(this.color);
-        this.sketch.circle(this.center_x, this.center_y, this.diameter);
-        this.sketch.pop();
+        this.getSketch().push();
+        this.getSketch().noFill();
+        this.getSketch().stroke(this.getColor());
+        this.getSketch().circle(this.getCenterX(), this.getCenterY(), this.getDiameter());
+        this.getSketch().pop();
     }
 
 
@@ -39,7 +38,7 @@ class Information extends Ring {
      * Method for increasing the diameter of the current Information instance by one growth_rate step.
      */
     updateInformationDiameter() {
-        this.diameter += this.#growth_rate;
+        this.setDiameter(this.getDiameter()+this.#growth_rate);
     }
 
     /**
@@ -48,5 +47,55 @@ class Information extends Ring {
     initPropStatus() {
         this.#prop_status = true;
     }
+
+    /**
+     * Get the value.
+     * @returns {number}
+     */
+    getInformationVal() {
+        return this.#val;
+    }
+
+    /**
+     * Get the speed.
+     * @returns {number}
+     */
+    getInformationGrowthRate() {
+        return this.#growth_rate;
+    }
+
+    /**
+     * Get the propagation status.
+     * @returns {boolean}
+     */
+    getInformationPropStatus() {
+        return this.#prop_status;
+    }
+
+    /**
+     * Set value.
+     * @param {number} val
+     */
+    setInformationVal(val) {
+        this.#val = val;
+    }
+
+    /**
+     * Set growth rate.
+     * @param growth_rate
+     * @returns {*}
+     */
+    setInformationGrowthRate(growth_rate) {
+        return this.#growth_rate = growth_rate;
+    }
+
+    /**
+     * Set the propagation status
+     * @param {boolean} prop_status
+     */
+    setInformationPropStatus(prop_status) {
+        this.#prop_status = prop_status;
+    }
+
 
 }
