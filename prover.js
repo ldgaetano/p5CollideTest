@@ -3,7 +3,7 @@ class Prover extends Ring {
     /**
      *
      * @param {string}       name
-     * @param {Commitment[]} commitments
+     * @param {Commit[]} commitments
      * @param {number}       center_x
      * @param {number}       center_y
      * @param {number}       diameter

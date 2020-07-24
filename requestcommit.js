@@ -1,4 +1,4 @@
-class RequestCommitment extends Ring {
+class RequestCommit extends Ring {
 
     /**
      *
@@ -35,11 +35,9 @@ class RequestCommitment extends Ring {
     }
 
     displayRequest() {
-        this.sketch.push();
         this.sketch.noFill();
         this.sketch.stroke(this.color);
         this.sketch.ellipse(this.center_x, this.center_y, this.updateRequestDiameter(), this.updateRequestDiameter());
-        this.sketch.pop();
     }
 
     updateRequestDiameter() {

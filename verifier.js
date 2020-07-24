@@ -22,12 +22,10 @@ class Verifier extends Ring {
 
     displayRequests() {
         this.requests.forEach(req => {
-            req.displayRequest();
+            if(this.sketch.frameCount % 30 === 0){
+                req.displayRequest();
+            }
         });
     }
-
-
-
-
 
 }

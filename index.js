@@ -20,33 +20,25 @@ const sketch1 = ( s1 ) => {
     let requests = [];
     let commitments = [];
 
+    // information
+    let i1;
+
     s1.setup = function() {
         s1.createCanvas(600, 600);
         s1.frameRate(30);
-
-        // generate a request
-        for (let i = 0; i < 2; i++) {
-            let req = new RequestCommitment(i, req_val, v1_x, v1_y, 0, req_speed, "blue", s1);
-            let com = new Commitment(i, com_val, p1_x, p1_y, p1_diam, com_speed, "yellow", s1);
-            requests.push(req);
-            commitments.push(com);
-        }
-        v1 = new Verifier("V1", requests, v1_x, v1_y, v1_diam, "blue", s1);
-        p1 = new Prover("P1", commitments, p1_x, p1_y, p1_diam, "yellow", s1);
-        console.log(v1);
-        console.log(p1);
+        v1 = new Character("V1", 0, 100, 100, 30, "blue", s1);
+        i1 = new Information("I1", 0, 1, v1.center_x, v1.center_y, 0, 3, "blue", s1);
+        v1.addInformation(i1);
     };
 
     s1.draw = function() {
         s1.background(220);
-
-        v1.displayVerifier();
-        v1.displayRequests();
-
-        p1.displayProver();
-        p1.displayCommitments();
+        v1.displayCharacter();
+        v1.emitInformation();
     };
 
 };
 
 let p5_test= new p5(sketch1, "p5-test-canvas");
+
+let test = new
