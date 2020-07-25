@@ -17,7 +17,7 @@ class Ring {
      * @param {number} center_y
      * @param {number} diameter
      * @param {string} color
-     * @param {Sketch} sketch
+     * @param {Object} sketch
      */
     constructor(name, id, center_x, center_y, diameter, color, sketch) {
         this.#name = name;
@@ -101,6 +101,14 @@ class Ring {
     }
 
     /**
+     * Get radius.
+     * @returns {number}
+     */
+    getRadius() {
+        return this.#diameter / 2;
+    }
+
+    /**
      * Get initial diameter.
      * @returns {number}
      */
@@ -118,7 +126,7 @@ class Ring {
 
     /**
      * Get sketch.
-     * @returns {Sketch}
+     * @returns {Object}
      */
     getSketch() {
         return this.#sketch;

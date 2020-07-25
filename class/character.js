@@ -2,19 +2,25 @@ class Character extends Ring {
 
     #queued_informations = [];    // Contains instances of Information objects provided to the Character instance.
     #displayed_informations = []; // Contains instances of Information objects to be displayed every frame.
+    #is_movable;                  // Parameter to determine whether or not the Character instance is movable.
+    #is_dragging = false;         // Parameter to determine whether or not the Character instance is moving.
+    #offSetX = 0;                 // Character center_x and mouseX offset.
+    #offSetY = 0;                 // Character center_y and mouseY offset.
 
     /**
      * Constructor for Character instance.
-     * @param {string} name
-     * @param {number} id
-     * @param {number} center_x
-     * @param {number} center_y
-     * @param {number} diameter
-     * @param {string} color
-     * @param {Sketch} sketch
+     * @param {string}  name
+     * @param {number}  id
+     * @param {number}  center_x
+     * @param {number}  center_y
+     * @param {number}  diameter
+     * @param {boolean} is_movable
+     * @param {string}  color
+     * @param {Object}  sketch
      */
-    constructor(name, id, center_x, center_y, diameter, color, sketch) {
+    constructor(name, id, center_x, center_y, diameter, is_movable, color, sketch) {
         super(name, id, center_x, center_y, diameter, color, sketch);
+        this.#is_movable = is_movable;
     }
 
     /**
@@ -34,10 +40,15 @@ class Character extends Ring {
         this.getSketch().text(this.getName(), this.getCenterX() - (this.getSketch().textWidth(this.getName()) / 2), this.getCenterY() + ((this.getSketch().textAscent() + this.getSketch().textDescent()) / 4));
         this.getSketch().pop();
 
+        // Check if Character is moving
+        if (this.#is_movable) {
+            this.#displayMovingCharacter();
+        }
+
     }
 
     /**
-     * Method to add Information object to #informations array.
+     * Method to add Information object to #queued_informations array.
      * @param {Information} info Instance of an Information object.
      */
     addInformation(info) {
@@ -45,7 +56,17 @@ class Character extends Ring {
     }
 
     /**
-     * Method to add Information object from user to #informations array.
+     * Method to add array of Information instances to #queued_informations array.
+     * @param {Information[]} info Array of Information objects.
+     */
+    addInformation(info) {
+        for(let i in info) {
+            this.#queued_informations.push(info[i]);
+        }
+    }
+
+    /**
+     * Method to add Information object from user to #queued_informations array.
      * @param {Information} info Instance of an Information object.
      */
     addInformationFromUser(info) {
@@ -53,15 +74,17 @@ class Character extends Ring {
     }
 
     /**
-     * Method to display the information and update
+     * Method to display Information instances emitting from the Character.
      */
     emitInformation() {
 
         // Add new element to #displayed_information every multiple of the frameCount only if #informations is populated.
-        if( (this.#queued_informations.length > 0) && (this.getSketch().frameCount % 30 === 0)) {
-            let new_info = this.#queued_informations.shift(); // Get Information instance from #informations array.
-            new_info.initPropStatus();                        // Initialize the propagation status.
-            this.#displayed_informations.push(new_info);      // Add Information instance to #displayed_informations array.
+        if( (this.#queued_informations.length > 0) && (this.getSketch().frameCount % 30 === 0) ) {
+
+            // Add Information instance to #displayed_informations array and initialize the propagation status.
+            let info = this.#queued_informations.shift();
+            info.initPropStatus();
+            this.#displayed_informations.push(info);
         }
 
         this.#displayed_informations.forEach(info => {
@@ -69,6 +92,50 @@ class Character extends Ring {
             info.updateInformationDiameter(); // Update the information diameter for the next frame.
         })
 
+    }
+
+    /**
+     * Method to display the Character instance while being dragged with the mouse.
+     */
+    #displayMovingCharacter() {
+        if (this.#is_dragging) {
+            this.setCenterX(this.getSketch().mouseX + this.#offSetX);
+            this.setCenterY(this.getSketch().mouseY + this.#offSetY);
+            this.updateQueuedInformationPosition();
+        }
+    }
+
+    /**
+     * Method to check when mouse click is pressed on Character instance.
+     */
+    characterIsPressed() {
+        // Check if cursor is over the Character and pressing
+        let distance = this.getSketch().dist(this.getSketch().mouseX, this.getSketch().mouseY, this.getCenterX(), this.getCenterY());
+        if (distance < this.getRadius()) {
+            this.getSketch().cursor(this.getSketch().HAND);
+            this.#is_dragging = true;
+            this.#offSetX = this.getCenterX() - this.getSketch().mouseX;
+            this.#offSetY = this.getCenterY() - this.getSketch().mouseY;
+        } else {
+            this.getSketch().cursor(this.getSketch().ARROW);
+        }
+    }
+
+    /**
+     * Method to check when mouse click is released from Character instance.
+     */
+    characterIsReleased() {
+        this.#is_dragging = false;
+    }
+
+    /**
+     * Method to update the Information instance position while Character is being dragged with the mouse.
+     */
+    updateQueuedInformationPosition() {
+        this.#queued_informations.forEach(info => {
+            info.setCenterX(this.getCenterX());
+            info.setCenterY(this.getCenterY());
+        })
     }
 
     /**
@@ -86,6 +153,24 @@ class Character extends Ring {
     getDisplayedInformations() {
         return this.#displayed_informations;
     }
+
+    /**
+     * Get if Character is movable.
+     * @returns {boolean}
+     */
+    getMovable() {
+        return this.#is_movable;
+    }
+
+    /**
+     * Set if Character is movable.
+     * @param {boolean} is_movable
+     */
+    setMovable(is_movable) {
+        this.#is_movable = is_movable;
+    }
+
+
 
 
 

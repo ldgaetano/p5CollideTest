@@ -8,13 +8,13 @@ class Information extends Ring {
      * Constructor for Information instance.
      * @param {string} name
      * @param {number} id
-     * @param {number} info_val
+     * @param {number} val
      * @param {number} center_x
      * @param {number} center_y
      * @param {number} diameter
      * @param {number} growth_rate
      * @param {string} color
-     * @param {Sketch} sketch
+     * @param {Object} sketch
      */
     constructor(name, id, val, center_x, center_y, diameter, growth_rate, color, sketch) {
         super(name, id, center_x, center_y, diameter, color, sketch);
@@ -83,10 +83,9 @@ class Information extends Ring {
     /**
      * Set growth rate.
      * @param growth_rate
-     * @returns {*}
      */
     setInformationGrowthRate(growth_rate) {
-        return this.#growth_rate = growth_rate;
+        this.#growth_rate = growth_rate;
     }
 
     /**

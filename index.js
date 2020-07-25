@@ -1,5 +1,8 @@
 const sketch1 = ( s1 ) => {
 
+    //
+    let characters = [];
+
     // verifiers
     let v1;
     let v1_diam = 20;
@@ -21,7 +24,7 @@ const sketch1 = ( s1 ) => {
     let commitments = [];
 
     // information
-    let i1;
+    let i1, i2;
 
     // temp button
     let button;
@@ -29,29 +32,55 @@ const sketch1 = ( s1 ) => {
     s1.setup = function() {
         s1.createCanvas(600, 600);
         s1.frameRate(30);
-        v1 = new Character("V1", 0, 100, 100, 30, "blue", s1);
+        s1.textSize(30);
+        v1 = new Character("V1", 0, 100, 100, 30, true, "blue", s1);
         i1 = new Information("I1", 0, 1, v1.getCenterX(), v1.getCenterY(), 0, 3, "blue", s1);
-        console.log(i1);
-        v1.addInformation(i1);
+        i2 = new Information("I2", 0, 2, v1.getCenterX(), v1.getCenterY(), 0, 3, "blue", s1);
+        v1.addInformation([i1, i2]);
         button = s1.createButton('GENERATE INFO AND EMIT');
         button.position(300, 100);
-        button.mousePressed(addInfoFromUser);
+        button.mouseClicked(addInfoFromButton);
+        characters = [v1];
     };
 
     s1.draw = function() {
         s1.background(220);
-        v1.displayCharacter();
-        v1.emitInformation();
+        s1.text(s1.frameCount, 500, 50);
+        displayCharacters();
     };
 
-    function addInfoFromUser() {
+    function addInfoFromButton() {
         v1.addInformationFromUser(generateInformation());
     }
 
-    function generateInformation(new_info_id) {
-        let gen_info = new Information("Generated  Info", s1.random(), s1.random(), v1.getCenterX(), v1.getCenterY(), i1.getInitDiameter(), i1.getInformationGrowthRate(), i1.getColor(), s1);
+    function generateInformation() {
+        let gen_info = new Information("Generated Info", s1.random(), s1.random(), v1.getCenterX(), v1.getCenterY(), i1.getInitDiameter(), i1.getInformationGrowthRate(), i1.getColor(), s1);
         console.log(gen_info);
         return gen_info;
+    }
+
+    function displayCharacters() {
+        if (characters.length > 0) {
+            characters.forEach(char => {
+                char.displayCharacter();
+                char.emitInformation();
+            })
+        }
+    }
+    
+    s1.mousePressed = function() {
+        if (characters.length > 0) {
+            characters.forEach(char => {
+                char.characterIsPressed();
+            })
+        }
+    }
+
+    s1.mouseReleased = function() {
+        if (characters.length > 0) {}
+        characters.forEach(char => {
+            char.characterIsReleased();
+        })
     }
 
 };
