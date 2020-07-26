@@ -42,6 +42,16 @@ class Ring {
     }
 
     /**
+     * Method to check if current Ring instance is being reached by another Ring instance.
+     * @param  {Ring} ring
+     * @return {boolean}
+     */
+    checkRing2RingCollision(ring) {
+        // Check if collision has occurred.
+        return this.getSketch().collideCircleCircle(this.getCenterX(), this.getCenterY(), this.getDiameter(), ring.getCenterX(), ring.getCenterY(), ring.getDiameter());
+    }
+
+    /**
      * Get name.
      * @returns {string}
      */

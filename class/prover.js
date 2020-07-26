@@ -1,7 +1,5 @@
 class Prover extends Character {
 
-    link;
-
     /**
      * Constructor for Character instance.
      * @param {string} name
@@ -10,12 +8,12 @@ class Prover extends Character {
      * @param {number} center_y
      * @param {number} diameter
      * @param {string} color
-     * @param {string} link
+     * @param {string} verifier_link
+     * @param {string} prover_link
      * @param {Object} sketch
      */
-    constructor(name, id, center_x, center_y, diameter, color, link, sketch) {
-        super(name, id, center_x, center_y, diameter, true, color, sketch);
-        this.link = link;
+    constructor(name, id, center_x, center_y, diameter, color, verifier_link, prover_link, sketch) {
+        super(name, id, center_x, center_y, diameter, true, color, [verifier_link, prover_link], sketch);
     }
 
     /**
@@ -23,24 +21,18 @@ class Prover extends Character {
      * @param {Information[]} requests
      */
     scanForRequests(requests) {
-        for(let i in requests) {
-           let request = requests[i];
-           if (this.checkProver2RequestCollision(request)) {
-                let commit = this.generateCommitFromRequest(request);
-                this.addSingleInformation(commit);
-           }
+        if (requests.length > 0) {
+            for(let i in requests) {
+                let request = requests[i];
+                // Check if request has reached prove.
+                if (this.checkRing2RingCollision(request)) {
+                    // Generate a corresponding commit
+                    let commit = this.generateCommitFromRequest(request);
+                    // Add commit to queue to be displayed.
+                    this.addSingleInformation(commit);
+                }
+            }
         }
-    }
-
-    /**
-     * Method to check if current Prover instance is being reached by an Information instance
-     * @param  {Information} request
-     * @return {boolean}
-     */
-    checkProver2RequestCollision(request) {
-        // Check if collision has occurred.
-        return this.getSketch().collideCircleCircle(this.getCenterX(), this.getCenterY(), this.getDiameter(), request.getCenterX(), request.getCenterY(), request.getDiameter());
-
     }
 
     /**
@@ -60,6 +52,23 @@ class Prover extends Character {
     generateCommitValue(request) {
         //TODO: Write proper implementation of this function.
         return request.getInformationVal();
+    }
+
+
+    /**
+     * Get Verifier link associated to current Prover instance.
+     * @returns {string}
+     */
+    getVerifierLink() {
+        return this.getCharacterLinks()[0];
+    }
+
+    /**
+     * Get Prover link associated to current Prover instance.
+     * @returns {string}
+     */
+    getProverLink() {
+        return this.getCharacterLinks()[1];
     }
 
 }

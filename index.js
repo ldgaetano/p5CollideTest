@@ -3,27 +3,31 @@ const sketch1 = ( s1 ) => {
     let characters = [];
     let provers = [];
     let verifiers = [];
-    let requests = [];
     let commitments = [];
 
+    // characters
+    let char_diam = 30;
+
     // verifiers
-    let v1;
-    let v1_diam = 20;
+    let v1, v2;
     let v1_x = 100;
     let v1_y = 100;
-    let req_speed = 3;
-    let req_val = 2;
+    let v2_x = 550;
+    let v2_y = 550;
+    let v1_requests = [];
+    let v2_requests = [];
 
 
     // provers
-    let p1;
-    let p1_diam = 20;
-    let p1_x = 500;
-    let p1_y = 500;
-    let com_speed = 3;
-    let com_val = 1;
+    let p1, p2;
+    let p1_x = 150;
+    let p1_y = 150;
+    let p2_x = 500;
+    let p2_y = 500;
 
     // information
+    let info_diam = 0;
+    let info_speed = 3;
     let i1, i2, i3, i4;
 
     // temp button
@@ -33,20 +37,29 @@ const sketch1 = ( s1 ) => {
         s1.createCanvas(600, 600);
         s1.frameRate(30);
         s1.textSize(30);
-        v1 = new Character("V1", 0, 100, 100, 30, false, "blue", s1);
-        p1 = new Prover("P1", 0, 500, 500, 30, "green", v1.getName(), s1);
-        i1 = new Information("I1", 0, 1, v1.getCenterX(), v1.getCenterY(), 0, 3, "blue", s1);
-        i2 = new Information("I2", 0, 2, v1.getCenterX(), v1.getCenterY(), 0, 3, "blue", s1);
-        i3 = new Information("I3", 0, 1, v1.getCenterX(), v1.getCenterY(), 0, 3, "blue", s1);
-        i4 = new Information("I4", 0, 2, v1.getCenterX(), v1.getCenterY(), 0, 3, "blue", s1);
-        requests = [i1];
-        v1.addInformation(requests);
-        button = s1.createButton('GENERATE INFO AND EMIT');
-        button.position(500, 50);
-        button.mouseClicked(addInfoFromButton);
-        verifiers = [v1];
-        provers = [p1];
+
+        v1 = new Verifier("V1", 0, v1_x, v1_y, char_diam, "blue", "P1", "V2", s1);
+        v2 = new Verifier("V2", 1, v2_x, v2_y, char_diam, "green", "P2", "V1", s1);
+        p1 = new Prover("P1", 0, p1_x, p1_y, char_diam, "yellow", "V1", "P2", s1);
+        p2 = new Prover("P2", 1, p2_x, p2_y, char_diam, "black", "V2", "P1", s1);
+
+        i1 = new Information("I1", 0, 1, v1.getCenterX(), v1.getCenterY(), info_diam, info_speed, "blue", s1);
+        i2 = new Information("I2", 1, 2, v1.getCenterX(), v1.getCenterY(), info_diam, info_speed, "blue", s1);
+        i3 = new Information("I3", 0, 1, v2.getCenterX(), v2.getCenterY(), info_diam, info_speed, "blue", s1);
+        i4 = new Information("I4", 1, 2, v2.getCenterX(), v2.getCenterY(), info_diam, info_speed, "blue", s1);
+
+        v1_requests = [i1, i2];
+        v2_requests = [i3, i4];
+        v1.addInformation(v1_requests);
+        v2.addInformation(v2_requests);
+        console.log(v1);
+
+        verifiers = [v1, v2];
+        provers = [p1, p2];
         characters = verifiers.concat(provers);
+
+        button = s1.createButton('GENERATE INFO AND EMIT');
+        button.mouseClicked(addInfoFromButton);
     };
 
     s1.draw = function() {
@@ -68,7 +81,7 @@ const sketch1 = ( s1 ) => {
      * @returns {Information}
      */
     function generateInformation() {
-        return new Information("Generated Info", s1.random(), s1.random(), v1.getCenterX(), v1.getCenterY(), i1.getInitDiameter(), i1.getInformationGrowthRate(), i1.getColor(), s1);
+        return new Information("Generated Info", s1.random(), s1.random(), v1.getCenterX(), v1.getCenterY(), i1.getInitDiameter(), i1.getInformationGrowthRate(), "red", s1);
     }
 
     /**
@@ -78,7 +91,23 @@ const sketch1 = ( s1 ) => {
         if (verifiers.length > 0) {
             for(let i in verifiers) {
                 let verifier = verifiers[i];
-                verifier.displayCharacter();
+                verifier.displayCharacter(); // Display prover on the screen every frame.
+                for(let j in provers) {
+                    let prover = provers[j];
+                    // Check if verifier and prover are linked together.
+                    if (verifier.getName() === prover.getVerifierLink()) {
+                        verifier.scanForCommits(prover.getDisplayedInformations());
+                    }
+                }
+
+                // Check for requests from paired verifiers.
+                for(let k in verifiers) {
+                    let compare_verifier = verifiers[k];
+                    // Check if verifier pairs are linked together.
+                    if (verifier.getName() === compare_verifier.getVerifierLink()) {
+                        verifier.scanForPairedRequests(compare_verifier.getDisplayedInformations());
+                    }
+                }
                 verifier.emitInformation();
             }
         }
@@ -92,15 +121,15 @@ const sketch1 = ( s1 ) => {
         if(provers.length > 0) {
             for(let i in provers) {
                 let prover = provers[i];
-                prover.displayCharacter();
-                //prover.scanForRequestsAndEmitCommitments(v1.getDisplayedInformations());
+                prover.displayCharacter(); // Display prover on the screen every frame.
                 for(let j in verifiers) {
                     let verifier = verifiers[j];
-                    if (prover.link == verifier.getName()) {
-                        prover.scanForRequests(verifier.getDisplayedInformations());
+                    // Check if prover and verifier are linked together.
+                    if (prover.getName() === verifier.getProverLink()) {
+                        prover.scanForRequests(verifier.getDisplayedInformations()); // Scan for requests from linked verifier.
                     }
                 }
-                prover.emitInformation();
+                prover.emitInformation(); // Emit any corresponding commits.
             }
         }
     }

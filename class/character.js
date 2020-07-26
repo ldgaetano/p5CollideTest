@@ -6,21 +6,29 @@ class Character extends Ring {
     #is_dragging = false;         // Parameter to determine whether or not the Character instance is moving.
     #offSetX = 0;                 // Character center_x and mouseX offset.
     #offSetY = 0;                 // Character center_y and mouseY offset.
+    #character_links;             // Linked Characters associated with current instance of Character.
 
     /**
      * Constructor for Character instance.
-     * @param {string}  name
-     * @param {number}  id
-     * @param {number}  center_x
-     * @param {number}  center_y
-     * @param {number}  diameter
-     * @param {boolean} is_movable
-     * @param {string}  color
-     * @param {Object}  sketch
+     * @param {string}   name
+     * @param {number}   id
+     * @param {number}   center_x
+     * @param {number}   center_y
+     * @param {number}   diameter
+     * @param {boolean}  is_movable
+     * @param {string}   color
+     * @param {string[]} [character_links]
+     * @param {Object}   sketch
      */
-    constructor(name, id, center_x, center_y, diameter, is_movable, color, sketch) {
+    constructor(name, id, center_x, center_y, diameter, is_movable, color, character_links, sketch) {
         super(name, id, center_x, center_y, diameter, color, sketch);
         this.#is_movable = is_movable;
+        if (character_links.length > 0) {
+            this.#character_links = character_links;
+        } else {
+            this.#character_links = [this.getID()];
+        }
+
     }
 
     /**
@@ -42,9 +50,9 @@ class Character extends Ring {
         this.getSketch().text(this.getName(), this.getCenterX() - (this.getSketch().textWidth(this.getName()) / 2), this.getCenterY() + ((this.getSketch().textAscent() + this.getSketch().textDescent()) / 4));
         this.getSketch().pop();
 
-        // Check if Character is moving
+        // Move character if it is a movable object.
         if (this.#is_movable) {
-            this.#displayMovingCharacter();
+            this.displayMovingCharacter();
         }
 
     }
@@ -57,15 +65,18 @@ class Character extends Ring {
         let queued = false;
         let displayed = false;
         this.#queued_informations.forEach(queued_info => {
+            // Check if info is in the queue already.
             if (info.getID() == queued_info.getID()) {
                 queued = true;
             }
         })
         this.#displayed_informations.forEach(displayed_info => {
+            // Check if info is displayed already.
             if(info.getID() == displayed_info.getID()) {
                 displayed = true;
             }
         })
+        // If info is not in the queue or displayed, then add it to the queue.
         if ( !(displayed || queued) ) {
             this.#queued_informations.push(info);
         }
@@ -77,7 +88,7 @@ class Character extends Ring {
      */
     addInformation(info) {
         for(let i in info) {
-            this.#queued_informations.push(info[i]);
+            this.addSingleInformation(info[i]);
         }
     }
 
@@ -103,6 +114,7 @@ class Character extends Ring {
             this.#displayed_informations.push(info);
         }
 
+        // If in the display queue, then display to the screen and update diameter every frame.
         this.#displayed_informations.forEach(info => {
             info.displayInformation();        // Display current information.
             info.updateInformationDiameter(); // Update the information diameter for the next frame.
@@ -113,7 +125,7 @@ class Character extends Ring {
     /**
      * Method to display the Character instance while being dragged with the mouse.
      */
-    #displayMovingCharacter() {
+    displayMovingCharacter() {
         if (this.#is_dragging) {
             this.setCenterX(this.getSketch().mouseX + this.#offSetX);
             this.setCenterY(this.getSketch().mouseY + this.#offSetY);
@@ -168,10 +180,26 @@ class Character extends Ring {
     }
 
     /**
+     * Get particular displayed information.
+     * @param {number} id
+     */
+    getDisplayedInformation(id) {
+        return this.#displayed_informations.find(info => info.getID() == id);
+    }
+
+    /**
+     * Remove the corresponding displayed information.
+     * @param info
+     */
+    removeDisplayedInformation(info) {
+        this.#displayed_informations.splice(this.#displayed_informations.indexOf(info), 1);
+    }
+
+    /**
      * Get if Character is movable.
      * @returns {boolean}
      */
-    getMovable() {
+    isMovable() {
         return this.#is_movable;
     }
 
@@ -183,8 +211,20 @@ class Character extends Ring {
         this.#is_movable = is_movable;
     }
 
+    /**
+     * Get the corresponding linked Character instance.
+     * @returns {string}
+     */
+    getCharacterLinks() {
+        return this.#character_links;
+    }
 
-
-
+    /**
+     * Set the corresponding Character instance link.
+     * @param {string[]} character_links
+     */
+    setCharacterLinks(character_links) {
+        this.#character_links = character_links;
+    }
 
 }
