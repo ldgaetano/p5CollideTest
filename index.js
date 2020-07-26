@@ -52,7 +52,6 @@ const sketch1 = ( s1 ) => {
         v2_requests = [i3, i4];
         v1.addInformation(v1_requests);
         v2.addInformation(v2_requests);
-        console.log(v1);
 
         verifiers = [v1, v2];
         provers = [p1, p2];
