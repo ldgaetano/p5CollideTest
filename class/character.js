@@ -33,8 +33,10 @@ class Character extends Ring {
         this.getSketch().noStroke();
         this.getSketch().fill(this.getColor());
         this.getSketch().circle(this.getCenterX(), this.getCenterY(), this.getDiameter());
+        this.getSketch().pop();
 
         // Display text.
+        this.getSketch().push();
         this.getSketch().textSize(15);
         this.getSketch().fill(255);
         this.getSketch().text(this.getName(), this.getCenterX() - (this.getSketch().textWidth(this.getName()) / 2), this.getCenterY() + ((this.getSketch().textAscent() + this.getSketch().textDescent()) / 4));
@@ -51,8 +53,22 @@ class Character extends Ring {
      * Method to add Information object to #queued_informations array.
      * @param {Information} info Instance of an Information object.
      */
-    addInformation(info) {
-        this.#queued_informations.push(info);
+    addSingleInformation(info) {
+        let queued = false;
+        let displayed = false;
+        this.#queued_informations.forEach(queued_info => {
+            if (info.getID() == queued_info.getID()) {
+                queued = true;
+            }
+        })
+        this.#displayed_informations.forEach(displayed_info => {
+            if(info.getID() == displayed_info.getID()) {
+                displayed = true;
+            }
+        })
+        if ( !(displayed || queued) ) {
+            this.#queued_informations.push(info);
+        }
     }
 
     /**
@@ -69,7 +85,7 @@ class Character extends Ring {
      * Method to add Information object from user to #queued_informations array.
      * @param {Information} info Instance of an Information object.
      */
-    addInformationFromUser(info) {
+    addSingleInformationFromUser(info) {
         this.#queued_informations.unshift(info);
     }
 
@@ -112,12 +128,9 @@ class Character extends Ring {
         // Check if cursor is over the Character and pressing
         let distance = this.getSketch().dist(this.getSketch().mouseX, this.getSketch().mouseY, this.getCenterX(), this.getCenterY());
         if (distance < this.getRadius()) {
-            this.getSketch().cursor(this.getSketch().HAND);
             this.#is_dragging = true;
             this.#offSetX = this.getCenterX() - this.getSketch().mouseX;
             this.#offSetY = this.getCenterY() - this.getSketch().mouseY;
-        } else {
-            this.getSketch().cursor(this.getSketch().ARROW);
         }
     }
 
