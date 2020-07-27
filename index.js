@@ -32,6 +32,7 @@ const sketch1 = ( s1 ) => {
 
     // temp button
     let button;
+    let reset;
 
     s1.setup = function() {
         s1.createCanvas(600, 600);
@@ -43,10 +44,10 @@ const sketch1 = ( s1 ) => {
         p1 = new Prover("P1", 0, p1_x, p1_y, char_diam, "yellow", "V1", "P2", s1);
         p2 = new Prover("P2", 1, p2_x, p2_y, char_diam, "black", "V2", "P1", s1);
 
-        i1 = new Information("I1", 0, 1, v1.getCenterX(), v1.getCenterY(), info_diam, info_speed, "blue", s1);
-        i2 = new Information("I2", 1, 2, v1.getCenterX(), v1.getCenterY(), info_diam, info_speed, "blue", s1);
-        i3 = new Information("I3", 0, 1, v2.getCenterX(), v2.getCenterY(), info_diam, info_speed, "blue", s1);
-        i4 = new Information("I4", 1, 2, v2.getCenterX(), v2.getCenterY(), info_diam, info_speed, "blue", s1);
+        i1 = new Information("I1", 0, 1, v1.getCenterX(), v1.getCenterY(), info_diam, info_speed, v1.getColor(), s1);
+        i2 = new Information("I2", 1, 2, v1.getCenterX(), v1.getCenterY(), info_diam, info_speed, v1.getColor(), s1);
+        i3 = new Information("I3", 0, 1, v2.getCenterX(), v2.getCenterY(), info_diam, info_speed, v2.getColor(), s1);
+        i4 = new Information("I4", 1, 2, v2.getCenterX(), v2.getCenterY(), info_diam, info_speed, v2.getColor(), s1);
 
         v1_requests = [i1, i2];
         v2_requests = [i3, i4];
@@ -57,8 +58,11 @@ const sketch1 = ( s1 ) => {
         provers = [p1, p2];
         characters = verifiers.concat(provers);
 
-        button = s1.createButton('GENERATE INFO AND EMIT');
+        button = s1.createButton("GENERATE INFO AND EMIT");
         button.mouseClicked(addInfoFromButton);
+
+        reset = s1.createButton("RESET");
+        reset.mouseClicked(resetSimulation);
     };
 
     s1.draw = function() {
@@ -80,7 +84,23 @@ const sketch1 = ( s1 ) => {
      * @returns {Information}
      */
     function generateInformation() {
-        return new Information("Generated Info", s1.random(), s1.random(), v1.getCenterX(), v1.getCenterY(), i1.getInitDiameter(), i1.getInformationGrowthRate(), "red", s1);
+        return new Information("User Request", s1.random(), s1.random(), v1.getCenterX(), v1.getCenterY(), i1.getInitDiameter(), i1.getInformationGrowthRate(), "red", s1);
+    }
+
+    /**
+     * Reset the simulation.
+     */
+    function resetSimulation() {
+        s1.noLoop();
+        for(let i in characters) {
+            let char = characters[i];
+            // Reset the position
+            char.setCenterX(char.getInitCenterX());
+            char.setCenterY(char.getInitCenterY());
+            char.resetQueuedInformation();
+            char.resetDisplayedInformation();
+        }
+        s1.loop();
     }
 
     /**
@@ -91,6 +111,8 @@ const sketch1 = ( s1 ) => {
             for(let i in verifiers) {
                 let verifier = verifiers[i];
                 verifier.displayCharacter(); // Display prover on the screen every frame.
+
+                // Check for commits from paired provers.
                 for(let j in provers) {
                     let prover = provers[j];
                     // Check if verifier and prover are linked together.
@@ -121,6 +143,8 @@ const sketch1 = ( s1 ) => {
             for(let i in provers) {
                 let prover = provers[i];
                 prover.displayCharacter(); // Display prover on the screen every frame.
+
+                // Check for requests from paired verifiers.
                 for(let j in verifiers) {
                     let verifier = verifiers[j];
                     // Check if prover and verifier are linked together.

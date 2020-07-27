@@ -164,6 +164,20 @@ class Character extends Ring {
     }
 
     /**
+     * Reset the queued information.
+     */
+    resetQueuedInformation() {
+        this.#displayed_informations = [];
+    }
+
+    /**
+     * Reset the displayed information.
+     */
+    resetDisplayedInformation() {
+        this.#displayed_informations = [];
+    }
+
+    /**
      * Get array of queued information.
      * @returns {Information[]}
      */

@@ -8,7 +8,7 @@ class Information extends Ring {
      * Constructor for Information instance.
      * @param {string} name
      * @param {number} id
-     * @param {number} val
+     * @param {*}      val
      * @param {number} center_x
      * @param {number} center_y
      * @param {number} diameter
@@ -32,7 +32,6 @@ class Information extends Ring {
         this.getSketch().circle(this.getCenterX(), this.getCenterY(), this.getDiameter());
         this.getSketch().pop();
     }
-
 
     /**
      * Method for increasing the diameter of the current Information instance by one growth_rate step.

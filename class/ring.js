@@ -4,6 +4,8 @@ class Ring {
     #id;
     #center_x;
     #center_y;
+    #init_center_x;
+    #init_center_y;
     #diameter;
     #color;
     #sketch;
@@ -24,6 +26,8 @@ class Ring {
         this.#id = id;
         this.#center_x = center_x;
         this.#center_y = center_y;
+        this.#init_center_x = center_x;
+        this.#init_center_y = center_y;
         this.#diameter = diameter;
         this.#init_diameter = diameter;
         this.#color = color;
@@ -81,6 +85,22 @@ class Ring {
      */
     getCenterY() {
         return this.#center_y;
+    }
+
+    /**
+     * Get the initial center_x position.
+     * @returns {number}
+     */
+    getInitCenterX() {
+        return this.#init_center_x;
+    }
+
+    /**
+     * Get the initial center_y position.
+     * @returns {number}
+     */
+    getInitCenterY() {
+        return this.#init_center_y;
     }
 
     /**
