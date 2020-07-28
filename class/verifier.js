@@ -59,7 +59,7 @@ class Verifier extends Character {
     }
 
     /**
-     * Get Verifier link associated to current Prover instance.
+     * Get Prover link associated to current Verifier instance.
      * @returns {string}
      */
     getProverLink() {
@@ -67,11 +67,29 @@ class Verifier extends Character {
     }
 
     /**
-     * Get Prover link associated to current Prover instance.
+     * Get Verifier link associated to current Verifier instance.
      * @returns {string}
      */
     getVerifierLink() {
         return this.getCharacterLinks()[1];
+    }
+
+    /**
+     * Check if Verifier is linked to input Prover instance.
+     * @param   {Prover} prover
+     * @returns {boolean}
+     */
+    isProverLinked(prover) {
+        return this.getProverLink() === prover.getName();
+    }
+
+    /**
+     * Check if Verifier is linked to input Verifier instance.
+     * @param   {Verifier} verifier
+     * @returns {boolean}
+     */
+    isVerifierLinked(verifier) {
+        return this.getVerifierLink() === verifier.getName();
     }
 
 }

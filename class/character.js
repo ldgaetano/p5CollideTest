@@ -59,7 +59,7 @@ class Character extends Ring {
 
     /**
      * Method to add Information object to #queued_informations array.
-     * @param {Information} info Instance of an Information object.
+     * @param {Information|RequestInfo|CommitInfo} info Instance of an Information object.
      */
     addSingleInformation(info) {
         let queued = false;
@@ -84,17 +84,17 @@ class Character extends Ring {
 
     /**
      * Method to add array of Information instances to #queued_informations array.
-     * @param {Information[]} info Array of Information objects.
+     * @param {Information[]|RequestInfo[]|CommitInfo[]} infos Array of Information objects.
      */
-    addInformation(info) {
-        for(let i in info) {
-            this.addSingleInformation(info[i]);
+    addInformation(infos) {
+        for(let i in infos) {
+            this.addSingleInformation(infos[i]);
         }
     }
 
     /**
      * Method to add Information object from user to #queued_informations array.
-     * @param {Information} info Instance of an Information object.
+     * @param {Information|RequestInfo|CommitInfo} info Instance of an Information object.
      */
     addSingleInformationFromUser(info) {
         this.#queued_informations.unshift(info);
@@ -179,7 +179,7 @@ class Character extends Ring {
 
     /**
      * Get array of queued information.
-     * @returns {Information[]}
+     * @returns {Information[]|RequestInfo[]|CommitInfo[]}
      */
     getQueuedInformations() {
         return this.#queued_informations;
@@ -198,7 +198,7 @@ class Character extends Ring {
      * @param {number} id
      */
     getDisplayedInformation(id) {
-        return this.#displayed_informations.find(info => info.getID() == id);
+        return this.#displayed_informations.find(info => info.getID() === id);
     }
 
     /**

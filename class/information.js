@@ -81,7 +81,7 @@ class Information extends Ring {
 
     /**
      * Set growth rate.
-     * @param growth_rate
+     * @param {number} growth_rate
      */
     setInformationGrowthRate(growth_rate) {
         this.#growth_rate = growth_rate;
