@@ -1,11 +1,11 @@
 const sketch1 = ( s1 ) => {
 
+    // characters
     let characters = [];
     let provers = [];
     let verifiers = [];
-
-    // characters
     let char_diam = 30;
+
 
     // verifiers
     let v1, v2;
@@ -24,10 +24,17 @@ const sketch1 = ( s1 ) => {
     let p2_x = 500;
     let p2_y = 500;
 
-    // information
+    // requests
     let info_diam = 0;
     let info_speed = 3;
+    let gen_request_color = "red";
+    let user_request_name = "User Request";
+    let request_i1, request_i2, request_i3, request_i4;
     let i1, i2, i3, i4;
+    i1 = [0, 1, 1, 1];
+    i2 = [1, 8, 1, 2];
+    i3 = [2, 3, 2, 2];
+    i4 = [4, 5, 2, 1];
 
     // temp button
     let button;
@@ -43,13 +50,13 @@ const sketch1 = ( s1 ) => {
         p1 = new Prover("P1", 0, p1_x, p1_y, char_diam, "yellow", "V1", "P2", s1);
         p2 = new Prover("P2", 1, p2_x, p2_y, char_diam, "black", "V2", "P1", s1);
 
-        i1 = new Information("I1", 0, 1, v1.getCenterX(), v1.getCenterY(), info_diam, info_speed, v1.getColor(), s1);
-        i2 = new Information("I2", 1, 2, v1.getCenterX(), v1.getCenterY(), info_diam, info_speed, v1.getColor(), s1);
-        i3 = new Information("I3", 0, 1, v2.getCenterX(), v2.getCenterY(), info_diam, info_speed, v2.getColor(), s1);
-        i4 = new Information("I4", 1, 2, v2.getCenterX(), v2.getCenterY(), info_diam, info_speed, v2.getColor(), s1);
+        request_i1 = new RequestInfo("I1", 0, i1, v1.getCenterX(), v1.getCenterY(), info_diam, info_speed, v1.getColor(), s1);
+        request_i2 = new RequestInfo("I2", 1, i2, v1.getCenterX(), v1.getCenterY(), info_diam, info_speed, v1.getColor(), s1);
+        request_i3 = new RequestInfo("I3", 0, i3, v2.getCenterX(), v2.getCenterY(), info_diam, info_speed, v2.getColor(), s1);
+        request_i4 = new RequestInfo("I4", 1, i4, v2.getCenterX(), v2.getCenterY(), info_diam, info_speed, v2.getColor(), s1);
 
-        v1_requests = [i1, i2];
-        v2_requests = [i3, i4];
+        v1_requests = [request_i1, request_i2];
+        v2_requests = [request_i3, request_i4];
         v1.addInformation(v1_requests);
         v2.addInformation(v2_requests);
 
@@ -79,11 +86,11 @@ const sketch1 = ( s1 ) => {
     }
 
     /**
-     * Generate some dummy Information instances.
-     * @returns {Information}
+     * Generate some dummy RequestInfo instances.
+     * @returns {RequestInfo}
      */
     function generateInformation() {
-        return new Information("User Request", s1.random(), s1.random(), v1.getCenterX(), v1.getCenterY(), i1.getInitDiameter(), i1.getInformationGrowthRate(), "red", s1);
+        return new RequestInfo(user_request_name, s1.random(), [s1.random(), s1.random(), s1.random(), s1.random()], v1.getCenterX(), v1.getCenterY(), info_diam, info_speed, gen_request_color, s1);
     }
 
     /**
@@ -116,7 +123,7 @@ const sketch1 = ( s1 ) => {
                 for(let j in provers) {
                     let prover = provers[j];
                     // Check if verifier and prover are linked together.
-                    if (verifier.getName() === prover.getVerifierLink()) {
+                    if (verifier.isProverLinked(prover)) {
                         verifier.scanForCommits(prover.getDisplayedInformations());
                     }
                 }
@@ -125,7 +132,7 @@ const sketch1 = ( s1 ) => {
                 for(let k in verifiers) {
                     let compare_verifier = verifiers[k];
                     // Check if verifier pairs are linked together.
-                    if (verifier.getName() === compare_verifier.getVerifierLink()) {
+                    if (verifier.isVerifierLinked(compare_verifier)) {
                         verifier.scanForPairedRequests(compare_verifier.getDisplayedInformations());
                     }
                 }
@@ -148,7 +155,7 @@ const sketch1 = ( s1 ) => {
                 for(let j in verifiers) {
                     let verifier = verifiers[j];
                     // Check if prover and verifier are linked together.
-                    if (prover.getName() === verifier.getProverLink()) {
+                    if (prover.isVerifierLinked(verifier)) {
                         prover.scanForRequests(verifier.getDisplayedInformations()); // Scan for requests from linked verifier.
                     }
                 }

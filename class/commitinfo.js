@@ -42,9 +42,9 @@ class CommitInfo extends Information {
 
     /**
      * Set the commit values of the CommitInfo instance.
-     * @param commit
+     * @param {Array<number>} commit_vals
      */
-    setCommitVals(commit) {
-        this.setInformationVal(commit);
+    setCommitVals(commit_vals) {
+        this.setInformationVal(commit_vals);
     }
 }
