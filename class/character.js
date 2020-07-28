@@ -66,13 +66,13 @@ class Character extends Ring {
         let displayed = false;
         this.#queued_informations.forEach(queued_info => {
             // Check if info is in the queue already.
-            if (info.getID() == queued_info.getID()) {
+            if (info.getID() === queued_info.getID()) {
                 queued = true;
             }
         })
         this.#displayed_informations.forEach(displayed_info => {
             // Check if info is displayed already.
-            if(info.getID() == displayed_info.getID()) {
+            if(info.getID() === displayed_info.getID()) {
                 displayed = true;
             }
         })
@@ -203,7 +203,7 @@ class Character extends Ring {
 
     /**
      * Remove the corresponding displayed information.
-     * @param info
+     * @param {Information} info
      */
     removeDisplayedInformation(info) {
         this.#displayed_informations.splice(this.#displayed_informations.indexOf(info), 1);

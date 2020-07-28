@@ -47,7 +47,7 @@ class Ring {
 
     /**
      * Method to check if current Ring instance is being reached by another Ring instance.
-     * @param  {Ring} ring
+     * @param  {Ring|Information|CommitInfo|RequestInfo|Character|Prover|Verifier} ring
      * @return {boolean}
      */
     checkRing2RingCollision(ring) {

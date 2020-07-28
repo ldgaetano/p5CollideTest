@@ -18,7 +18,7 @@ class Verifier extends Character {
 
     /**
      * Method to scan for Verifier requests and emit Prover commitments.
-     * @param {Information[]} commits
+     * @param {CommitInfo[]} commits
      */
     scanForCommits(commits) {
         if (commits.length > 0) {
@@ -37,7 +37,7 @@ class Verifier extends Character {
 
     /**
      * Scan for requests from Verifier pair.
-     * @param {Information[]} requests
+     * @param {RequestInfo[]} requests
      */
     scanForPairedRequests(requests) {
         if (requests.length > 0) {
