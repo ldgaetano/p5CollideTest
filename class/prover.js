@@ -100,4 +100,22 @@ class Prover extends Character {
         return this.getCharacterLinks()[1];
     }
 
+    /**
+     * Check if Prover is linked to input Prover instance.
+     * @param   {Prover} prover
+     * @returns {boolean}
+     */
+    isProverLinked(prover) {
+        return this.getProverLink() === prover.getName();
+    }
+
+    /**
+     * Check if Prover is linked to input Verifier instance.
+     * @param   {Verifier} verifier
+     * @returns {boolean}
+     */
+    isVerifierLinked(verifier) {
+        return this.getVerifierLink() === verifier.getName();
+    }
+
 }

@@ -28,7 +28,7 @@ class RequestInfo extends Information {
      * Get the r values of the request.
      * @returns {Array<number>}
      */
-    getRequestVals() {
+    getRequestRVals() {
         return this.getInformationVal().slice(2, 4);
     }
 
@@ -66,10 +66,10 @@ class RequestInfo extends Information {
 
     /**
      * Set the request values of the RequestInfo instance.
-     * @param {Array<number>}
+     * @param {Array<number>} request_vals
      */
-    setRequestVals(request) {
-        this.setInformationVal(request);
+    setRequestVals(request_vals) {
+        this.setInformationVal(request_vals);
     }
 
 }
