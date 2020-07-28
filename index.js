@@ -3,7 +3,6 @@ const sketch1 = ( s1 ) => {
     let characters = [];
     let provers = [];
     let verifiers = [];
-    let commitments = [];
 
     // characters
     let char_diam = 30;
@@ -94,9 +93,10 @@ const sketch1 = ( s1 ) => {
         s1.noLoop();
         for(let i in characters) {
             let char = characters[i];
-            // Reset the position
+            // Reset the position.
             char.setCenterX(char.getInitCenterX());
             char.setCenterY(char.getInitCenterY());
+            // Reset the information.
             char.resetQueuedInformation();
             char.resetDisplayedInformation();
         }
@@ -157,6 +157,9 @@ const sketch1 = ( s1 ) => {
         }
     }
 
+    /**
+     * Function to called when mouse click is pressed.
+     */
     s1.mousePressed = function() {
         if (characters.length > 0) {
             for(let i in characters) {
@@ -165,6 +168,9 @@ const sketch1 = ( s1 ) => {
         }
     }
 
+    /**
+     * Function called when mouse click is released.
+     */
     s1.mouseReleased = function() {
         for(let i in characters) {
             characters[i].characterIsReleased();

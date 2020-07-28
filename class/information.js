@@ -49,7 +49,7 @@ class Information extends Ring {
 
     /**
      * Get the value.
-     * @returns {number}
+     * @returns {*}
      */
     getInformationVal() {
         return this.#val;
@@ -73,7 +73,7 @@ class Information extends Ring {
 
     /**
      * Set value.
-     * @param {number} val
+     * @param {*} val
      */
     setInformationVal(val) {
         this.#val = val;
